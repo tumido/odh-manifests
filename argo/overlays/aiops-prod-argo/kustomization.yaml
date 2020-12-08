@@ -12,6 +12,43 @@ commonLabels:
 resources:
   - ../../base
   - ./membership.yaml
+  # - ./argo-sso-token.yaml
+  # - ./argo-sso-sa.yaml
+
+# components:
+#   - ../../components/dex
+
+# configMapGenerator:
+#   - name: argocd-cm
+#     files:
+#       - argocd-cm/dex.config
+#       - argocd-cm/url
 
 patchesStrategicMerge:
   - ./workflow-controller-configmap.yaml
+patchesJson6902:
+  - patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --auth-mode
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: sso
+
+    #       - op: add
+    #         path: /spec/template/spec/containers/0/volumeMounts
+    #         value:
+    #           - mountPath: "/etc/ssl/certs/"
+    #             name: ssl
+    #             readOnly: True
+    #       - op: add
+    #         path: /spec/template/spec/volumes
+    #         value:
+    #           - name: ssl
+    #             secret:
+    #               secretName: argo-sso-token
+    target:
+      group: apps
+      kind: Deployment
+      name: argo-server
+      version: v1

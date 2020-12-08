@@ -12,3 +12,14 @@ data:
       ttlStrategy:
         secondsAfterCompletion: 86400
         secondsAfterSuccess: 3600
+  sso: |
+    issuer: http://dex-aiops-prod-argo.apps.tcoufaltest.lab.pnq2.cee.redhat.com/api/dex
+    clientId:
+      name: dex-client
+      key: client
+    clientSecret:
+      name: dex-client
+      key: token
+    redirectUrl: http://argo-server-aiops-prod-argo.apps.tcoufaltest.lab.pnq2.cee.redhat.com/oauth2/callback
+    rbac:
+      enabled: false

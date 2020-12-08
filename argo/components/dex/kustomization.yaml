@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # - github.com/argoproj/argo-cd/manifests/base/dex
+  - dex-deployment.yaml
+  - dex-service.yaml
+  - dex-cm.yaml
+  - dex-sa.yaml
+  - dex-route.yaml
+  # - argo-dex-server-rolebinding.yaml
+  - dex-sa-client.yaml
+  - dex-sa-token.yaml
+
+commonLabels:
+  app.kubernetes.io/name: dex
+  app.kubernetes.io/part-of: argo
+  app.kubernetes.io/component: dex-server
+# configMapGenerator:
+#   - name: argocd-cm
+#     options:
+#       labels:
+#         app.kubernetes.io/part-of: argocd # https://github.com/argoproj/argo-cd/issues/2931
+#     files:
+#       - argocd-cm/dex.config
+#       - argocd-cm/url
+
+# generatorOptions:
+#   disableNameSuffixHash: true
+
+# images:
+#   - name: argoproj/argocd:latest
+#     newName: quay.io/aicoe/argocd
+#     newTag: v1.7.4-3

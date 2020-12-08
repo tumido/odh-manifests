@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dex
+spec:
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+              weight: 5
+      containers:
+        - command:
+            - "/usr/local/bin/dex"
+            - "serve"
+            - "/etc/dex/cfg/config.yaml"
+          image: quay.io/dexidp/dex:v2.25.0
+          imagePullPolicy: Always
+          name: dex
+          ports:
+            - containerPort: 5556
+            - containerPort: 5557
+            - containerPort: 5558
+          volumeMounts:
+            - mountPath: /etc/dex/cfg
+              name: config
+          env:
+            - name: DEX_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dex-token
+                  key: token
+      # serviceAccountName: dex
+      volumes:
+        - name: config
+          configMap:
+            name: dex
+            items:
+              - key: config.yaml
+                path: config.yaml
