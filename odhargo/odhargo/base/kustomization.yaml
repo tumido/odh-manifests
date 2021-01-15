@@ -37,3 +37,15 @@ patchesJson6902:
       kind: Deployment
       name: workflow-controller
       version: v1
+  - path: ./managed-namespace_patch.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: argo-server
+      version: v1
+  - path: ./managed-namespace_patch.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: workflow-controller
+      version: v1
