@@ -25,7 +25,7 @@ images:
     newTag: v2.12.5
   - name: argoproj/argocli
     newName: quay.io/argoproj/argocli
-    newTag: v2.12.5
+    newTag: latest
 
 patchesJson6902:
   - patch: |
