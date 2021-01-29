@@ -9,11 +9,3 @@ generators:
 
 patchesStrategicMerge:
   - hue-mysql-pvc.yaml
-
-patchesJson6902:
-  - target:
-      kind: DeploymentConfig
-      name: hue
-      version: v1
-      group: apps.openshift.io
-    path: ./hue_dc_patch.json
