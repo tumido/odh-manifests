@@ -5,3 +5,7 @@ resources:
   - subscription.yaml
   - presto-cr.yaml
   - aws-secret.yaml
+  - postgres-dc.yaml
+  - postgres-pvc.yaml
+  - postgres-secret.yaml
+  - postgres-service.yaml

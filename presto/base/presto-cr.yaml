@@ -18,14 +18,15 @@ spec:
 
 
   prometheus:
+    additionalRules:
+    - name: failed_tasks
+      pattern: presto.execution<name=TaskManager><>FailedTasks.TotalCount
+      type: COUNTER
     enabled: true
-    additionalRules: {}
 
   service:
-    type: NodePort
-    name: "dev-presto"
-    additionalSpecProperties: {}
-    nodePort: 31234
+    name: presto-service
+    type: ClusterIP
 
 
   image:
@@ -41,8 +42,8 @@ spec:
     queryMaxTotalMemoryPerNodePoolFraction: 0.333
 
   coordinator:
-    cpuLimit: 1
-    cpuRequest: 1
+    cpuLimit: 2
+    cpuRequest: 2
     memoryAllocation: 4Gi
     nodeSelector: {}
     affinity: {}
@@ -56,8 +57,8 @@ spec:
       maxReplicas: 100
       targetCPUUtilizationPercentage: 80
     deploymentTerminationGracePeriodSeconds: 7200 # 2 hours
-    cpuLimit: 1
-    cpuRequest: 1
+    cpuLimit: 2
+    cpuRequest: 2
     memoryAllocation: 4Gi
     nodeSelector: {}
     affinity: {}
@@ -87,32 +88,27 @@ spec:
 
   hive:
     awsSecretName: "aws-secret"
-    googleServiceAccountKeySecretName: ""
-    azureAbfsSecretName: ""
-    azureAdlSecretName: ""
-    additionalProperties: ""
+    additionalProperties: |
+      connector.name=hive-hadoop2
+      hive.s3.endpoint=https://s3.upshift.redhat.com/
+      hive.s3.signer-type=S3SignerType
+      hive.s3.path-style-access=true
+      hive.s3.staging-directory=/tmp
+      hive.s3.ssl.enabled=false
+      hive.s3.sse.enabled=false
+      hive.allow-drop-table=true
+      #hive.metastore.storage.schema.reader.impl=org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader
     internalMetastore:
+      cpu: 1
+      image:
+        imagepullPolicy: IfNotPresent
       postgreSql:
-        jdbcUrl: ""
-        username: ""
-        password: ""
-      internalPostgreSql:
-        enabled: true
-        image:
-          name: centos/postgresql-96-centos7
-          pullPolicy: IfNotPresent
-        storage:
-          className: ""
-          size: 4Gi
-          claimSelector: {}
-        memory: 2Gi
-        cpu: 1
-        nodeSelector: {}
-        affinity: {}
-      s3Endpoint: s3.upshift.redhat.com
+        jdbcUrl: "postgresql://datacatalog:datacatalog@postgres:5432/datacatalog"
+        username: "datacatalog"
+        password: "datacatalog"
+      s3Endpoint: https://s3.upshift.redhat.com/
       image:
         name: starburstdata/hive-metastore:k8s-0.7.osc
-
         pullPolicy: IfNotPresent
       memory: 4Gi
       cpu: 1

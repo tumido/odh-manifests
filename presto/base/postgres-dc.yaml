@@ -1,0 +1,77 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: presto-postgres
+  labels:
+    app: presto
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    deploymentconfig: presto-postgres
+  template:
+    metadata:
+      labels:
+        deploymentconfig: presto-postgres
+    spec:
+      containers:
+        - name: postgresql
+          image: "quay.io/internaldatahub/postgresql-96-centos7:9.6"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          readinessProbe:
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+            exec:
+              command:
+                - "/usr/libexec/check-container"
+          livenessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 120
+            exec:
+              command:
+                - "/usr/libexec/check-container"
+                - "--live"
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: database-user
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: database-password
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: database-name
+          resources:
+            limits:
+              cpu: 1
+              memory: "2Gi"
+            requests:
+              cpu: 1
+              memory: "1Gi"
+          volumeMounts:
+            - name: "postgresql-data"
+              mountPath: "/var/lib/pgsql/data"
+          terminationMessagePath: "/dev/termination-log"
+          imagePullPolicy: IfNotPresent
+          capabilities: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+      volumes:
+        - name: "postgresql-data"
+          persistentVolumeClaim:
+            claimName: postgresql
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst

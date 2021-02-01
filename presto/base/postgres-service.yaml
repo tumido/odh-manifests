@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres
+  labels:
+    app: presto
+  annotations:
+    template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+spec:
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+      nodePort: 0
+  selector:
+    deploymentconfig: presto-postgres
+  type: ClusterIP
+  sessionAffinity: None
+status:
+  loadBalancer: {}
