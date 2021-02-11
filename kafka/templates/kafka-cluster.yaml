@@ -4,6 +4,7 @@ metadata:
   name: {{ $.Values.kafka_cluster_name | quote }}
   namespace: {{ $.Values.namespace | quote }}
 spec:
+  kafkaExporter: {}
   kafka:
     version: {{ $.Values.kafka_version | quote }}
     readinessProbe:
