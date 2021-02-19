@@ -88,10 +88,6 @@ spec:
           terminationMessagePath: "/dev/termination-log"
           terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent
-          capabilities: {}
-          securityContext:
-            capabilities: {}
-            privileged: false
       volumes:
         - name: mysql
           persistentVolumeClaim:
