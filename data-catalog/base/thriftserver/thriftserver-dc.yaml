@@ -63,12 +63,12 @@ spec:
               cpu: "4"
               memory: 1Gi
           livenessProbe:
-            failureThreshold: 4
+            failureThreshold: 2
             httpGet:
               path: /jobs/
               port: 4040
               scheme: HTTP
-            periodSeconds: 30
+            periodSeconds: 10
             initialDelaySeconds: 300
             successThreshold: 1
             timeoutSeconds: 5
