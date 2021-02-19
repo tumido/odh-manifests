@@ -9,7 +9,6 @@ resources:
   - hue-mysql-pvc.yaml
   - hue-mysql-secret.yaml
   - hue-mysql-service.yaml
-  - hue-mysqld-exporter-secret.yaml
   - hue-route.yaml
   - hue-secret.yaml
   - hue-service.yaml
@@ -20,8 +19,6 @@ images:
   - name: mysql
     newName: openshift/mysql
     newTag: "5.7"
-  - name: mysqld-exporter
-    newName: quay.io/internaldatahub/mysqld-exporter
 
 patchesJson6902:
   - patch: |-

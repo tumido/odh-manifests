@@ -27,25 +27,6 @@ spec:
         deploymentconfig: hue-mysql
     spec:
       containers:
-        - name: mysqld-exporter
-          image: mysqld-exporter
-          ports:
-            - containerPort: 9104
-              protocol: TCP
-          env:
-            - name: DATA_SOURCE_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: "hue-mysqld-exporter-secret"
-                  key: DATA_SOURCE_NAME
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: 9104
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: 9104
         - name: mysql
           image: mysql
           ports:
