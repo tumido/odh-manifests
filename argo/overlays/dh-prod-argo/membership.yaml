@@ -63,3 +63,5 @@ subjects:
     name: esammons
   - kind: User
     name: jeking
+  - kind: Group
+    name: qe-ds
