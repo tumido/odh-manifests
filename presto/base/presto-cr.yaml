@@ -100,9 +100,6 @@ spec:
       hive.parquet.use-column-names=true
       #hive.metastore.storage.schema.reader.impl=org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader
     internalMetastore:
-      cpu: 1
-      image:
-        imagepullPolicy: IfNotPresent
       postgreSql:
         jdbcUrl: "jdbc:postgresql://postgres.local:5432/datacatalog"
         username: "datacatalog"

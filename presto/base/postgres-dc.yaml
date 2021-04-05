@@ -64,7 +64,6 @@ spec:
             - name: "postgresql-data"
               mountPath: "/var/lib/pgsql/data"
           terminationMessagePath: "/dev/termination-log"
-          imagePullPolicy: IfNotPresent
           capabilities: {}
           securityContext:
             capabilities: {}
