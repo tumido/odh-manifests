@@ -357,6 +357,42 @@ spec:
     importPolicy:
       scheduled: true
     name: "latest"
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    opendatahub.io/notebook-image: "true"
+  name: s2i-pytorch-py38-notebook
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/thoth-station/s2i-pytorch-py38-notebook:latest
+    importPolicy:
+      scheduled: true
+    name: "latest"
+
+# s2i-data-science-notebook
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    opendatahub.io/notebook-image: "true"
+  name: s2i-data-science-py38-notebook
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/thoth-station/s2i-generic-data-science-notebook:v0.0.2
+    name: "v0.0.2"
+    referencePolicy:
+      type: Source
 
 ---
 kind: BuildConfig
